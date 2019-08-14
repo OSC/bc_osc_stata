@@ -32,8 +32,7 @@ module load stata
 
 # Launch stat
 xstata-mp
-stata_pid=$(ps | grep 'xstata-mp')
-while true; do
-  ls /proc/${stata_pid}
-  sleep 1/10
+stata_pid=$(ps | grep 'xstata-mp' | awk '{print $1}')
+while [[ -d "/proc/$stata_pid" ]]; do
+  sleep 1
 done
