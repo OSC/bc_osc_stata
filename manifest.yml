@@ -4,7 +4,7 @@ category: Interactive Apps
 subcategory: GUIs
 role: batch_connect
 description: |
-  This app will laynch a [Stata] GUI on the [Owens cluster]. You will be able to interact with the Stata GUI 
+  This app will launch a [Stata] GUI on the [Owens cluster]. You will be able to interact with the Stata GUI 
   through a VNC session.
 
   [Stata]: https://www.stata.com/

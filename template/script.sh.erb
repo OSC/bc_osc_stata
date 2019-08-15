@@ -30,9 +30,13 @@ cd "${HOME}"
 # Load the required enviornment
 module load stata
 
-# Launch stat
+# Launch stata
+# note that xstata-mp doesn't block so we have to watch it
 xstata-mp
-stata_pid=$(ps | grep 'xstata-mp' | awk '{print $1}')
+
+# Get the PID of the last xstata-mp process started that I own
+stata_pid=$( pgrep -u "$USER" 'xstata-mp' | tail )
+# As long as the PID directory exists we wait
 while [[ -d "/proc/$stata_pid" ]]; do
   sleep 1
 done
