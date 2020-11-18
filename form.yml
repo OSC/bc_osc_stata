@@ -1,5 +1,7 @@
 ---
-cluster: "owens"
+cluster:
+- "owens"
+- "owens-slurm"
 form:
   - version
   - bc_account
@@ -37,8 +39,8 @@ attributes:
         available RAM as well as 48 cores. There are 16 of these nodes on
         Owens. Requesting hugemem nodes allocates entire nodes.
     options:
-      - [ "any",     ""            ]
-      - [ "hugemem", ":hugemem"    ]
+      - "any"
+      - "hugemem"
   version:
     widget: select
     label: "Stata version"
