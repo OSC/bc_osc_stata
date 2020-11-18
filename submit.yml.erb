@@ -11,7 +11,7 @@
     partition = [ "--partition", partition_str ]
   end
 
-  slurm_args = partition + [ "--nodes", "#{nodes}", "--ntasks-per-node", "#{ppn}" ]
+  slurm_args = partition + [ "--nodes", "#{nodes}", "--ntasks-per-node", "#{ppn}", "--licenses", "stata@osc" ]
   torque_args = node_type == 'any' ? "#{nodes}:ppn=#{ppn}" : "#{nodes}:ppn=#{ppn}:#{node_type}"
 %>
 ---
