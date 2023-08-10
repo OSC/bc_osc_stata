@@ -38,6 +38,9 @@ module load <%= context.version %>
 # setenv("OSC_STATA_DIR","/usr/local/stata/15")
 # prepend_path("PATH","/usr/local/stata/15")
 
+# make sure that XFCE boots up before you do
+sleep 3
+
 # Launch stata
 # note that xstata-mp doesn't block so we have to watch it
 xstata-mp
