@@ -1,14 +1,9 @@
-<%-
-  groups = OodSupport::User.new.groups.sort_by(&:id).tap { |groups|
-    groups.unshift(groups.delete(OodSupport::Process.group))
-  }.map(&:name).grep(/^P./)
--%>
 ---
 cluster:
 - "owens"
 form:
   - version
-  - account
+  - auto_accounts
   - bc_num_hours
   - bc_num_slots
   - num_cores
@@ -29,13 +24,6 @@ attributes:
   bc_num_slots: "1"
   bc_vnc_resolution:
     required: true
-  account:
-    label: "Project"
-    widget: select
-    options:
-      <%- groups.each do |group| %>
-      - "<%= group %>"
-      <%- end %>
   node_type:
     widget: select
     label: "Node type"
