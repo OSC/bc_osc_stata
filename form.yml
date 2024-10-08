@@ -1,8 +1,9 @@
 ---
 cluster:
 - "owens"
+- "cardinal"
 form:
-  - version
+  - auto_modules_stata
   - auto_accounts
   - bc_num_hours
   - bc_num_slots
@@ -37,16 +38,11 @@ attributes:
       - [ 
           "any", "any",
           data-max-num-cores: 28,
+          data-min-num-cores: 1,
         ]
       - [ 
           "hugemem", "hugemem",
           data-min-num-cores: 4,
           data-max-num-cores: 48,
+          data-option-for-cluster-cardinal: false,
         ]
-  version:
-    widget: select
-    label: "Stata version"
-    help: "This defines the version of Stata you want to load."
-    options:
-     - [ "15", "stata/15" ]
-     - [ "17", "stata/17" ]
