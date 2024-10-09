@@ -1,14 +1,10 @@
-<%-
-  groups = OodSupport::User.new.groups.sort_by(&:id).tap { |groups|
-    groups.unshift(groups.delete(OodSupport::Process.group))
-  }.map(&:name).grep(/^P./)
--%>
 ---
 cluster:
 - "owens"
+- "cardinal"
 form:
-  - version
-  - account
+  - auto_modules_stata
+  - auto_accounts
   - bc_num_hours
   - bc_num_slots
   - num_cores
@@ -29,13 +25,6 @@ attributes:
   bc_num_slots: "1"
   bc_vnc_resolution:
     required: true
-  account:
-    label: "Project"
-    widget: select
-    options:
-      <%- groups.each do |group| %>
-      - "<%= group %>"
-      <%- end %>
   node_type:
     widget: select
     label: "Node type"
@@ -49,16 +38,11 @@ attributes:
       - [ 
           "any", "any",
           data-max-num-cores: 28,
+          data-min-num-cores: 1,
         ]
       - [ 
           "hugemem", "hugemem",
           data-min-num-cores: 4,
           data-max-num-cores: 48,
+          data-option-for-cluster-cardinal: false,
         ]
-  version:
-    widget: select
-    label: "Stata version"
-    help: "This defines the version of Stata you want to load."
-    options:
-     - [ "15", "stata/15" ]
-     - [ "17", "stata/17" ]
