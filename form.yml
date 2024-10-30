@@ -1,9 +1,8 @@
 ---
 cluster:
-- "owens"
 - "cardinal"
 form:
-  - auto_modules_stata
+  - stata_version
   - auto_accounts
   - bc_num_hours
   - bc_num_slots
@@ -12,6 +11,7 @@ form:
   - bc_vnc_resolution
   - bc_email_on_started
 attributes:
+  stata_version: "stata/18"
   num_cores:
     widget: "number_field"
     label: "Number of cores"
@@ -19,8 +19,8 @@ attributes:
     help: |
       Number of cores on node type (4 GB per core unless requesting whole
       node). Leave blank if requesting full node.
-    min: 0
-    max: 28
+    min: 1
+    max: 96
     step: 1
   bc_num_slots: "1"
   bc_vnc_resolution:
@@ -29,20 +29,19 @@ attributes:
     widget: select
     label: "Node type"
     help: |
-      - **any** - (*1-28 cores*) Use any available Owens node. This reduces the
+      - **any** - (*1-96 cores*) Use any available Cardinal node. This reduces the
         wait time as there are no node requirements.
-      - **hugemem** - (*4-48 cores*) Use an Owens node that has 1.5TB of
-        available RAM as well as 48 cores. There are 16 of these nodes on
-        Owens.
+      - **hugemem** - (*4-96 cores*) Use an Cardinal node that has 2 TB of
+        available RAM as well as 96 cores. There are 16 of these nodes on
+        Cardinal.
     options:
       - [ 
           "any", "any",
-          data-max-num-cores: 28,
+          data-max-num-cores: 96,
           data-min-num-cores: 1,
         ]
       - [ 
           "hugemem", "hugemem",
-          data-min-num-cores: 4,
-          data-max-num-cores: 48,
-          data-option-for-cluster-cardinal: false,
+          data-min-num-cores: 43,
+          data-max-num-cores: 96,
         ]
