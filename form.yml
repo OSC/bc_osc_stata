@@ -42,6 +42,6 @@ attributes:
         ]
       - [ 
           "hugemem", "hugemem",
-          data-min-num-cores: 43,
+          data-min-num-cores: 46,
           data-max-num-cores: 96,
         ]
