@@ -11,6 +11,9 @@ form:
   - bc_vnc_resolution
   - bc_email_on_started
 attributes:
+  bc_num_hours:
+    min: 1
+    max: 8
   stata_version: "stata/18"
   num_cores:
     widget: "number_field"
