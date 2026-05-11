@@ -81,7 +81,6 @@ Edit `form.yml` and update these values for your cluster:
 | `cluster` | `"cardinal"` | Your cluster name |
 | `stata_version` | `"stata/18"` | The version of Stata available on your system |
 | `node_type` | OSC-specific node types | Node types available on your system |
-|
 
 ### 3. Verify
 
@@ -118,7 +117,7 @@ No OOD restart is needed (Batch Connect apps are detected automatically). Visit 
 
 The app may need more time to start. Increase the connection timeout or check that the compute node can open the required port.
 
-##Testing
+## Testing
 
 | Site                      | OOD Version    | Scheduler | Status     |
 |---------------------------|----------------|-----------|------------|
