@@ -103,6 +103,7 @@ No OOD restart is needed (Batch Connect apps are detected automatically). Visit 
 ### Environment Variables
 
 | Variable | Required | Description |
+|---------|---------|----------|
 | STATA_HOME | Yes | Path to Stata installation root |
 
 ## Troubleshooting
