@@ -5,9 +5,15 @@
 
 ## Overview
 
-OSC Stata is an Open OnDemand Batch Connect app designed for OSC that launches Stata within an interactive desktop session on HPC clusters. Stata is designed for researchers who need data analysis and visualization.
+An [Open OnDemand](https://openondemand.org/) Batch Connect app that launches
+a [Stata](https://www.stata.com/) GUI (`xstata-mp`) in an XFCE desktop session
+on the OSC Cardinal cluster. Stata is a statistical software suite for data
+management, analysis, and graphics.
 
-- Upstream Project: [Stata](https://www.stata.com/)
+This app uses the Batch Connect `vnc` template with Slurm.
+
+- **Upstream project:** [Stata](https://www.stata.com/)
+- **Batch Connect template:** `vnc`
 
 ## Screenshots
 
@@ -15,37 +21,41 @@ OSC Stata is an Open OnDemand Batch Connect app designed for OSC that launches S
 
 ## Features
 
-- Launches Stata via an interactive session
-- Supports CPU-based statistical computing workloads
-- Configurable cores, wall time, and node type via the launch form
-- Module-based environment using Lmod 
+- Launches Stata multiprocessor GUI (`xstata-mp`) in an XFCE VNC desktop
+  session
+- Configurable cores, wall time, and node type (any, hugemem) via the launch
+  form
+- Slurm license reservation (`stata@osc`) handled automatically
+- Hugemem node support with parallel partition for multi-node jobs
+- Wall time limited to 1--8 hours via form constraints
+- Configurable VNC resolution
 
 ## Requirements
 
 ### Compute Node Software
 
-- [Stata] 15
-- [Xfce Desktop] 4+
+
+This Batch Connect app requires the following software be installed on the
+**compute nodes** that the batch job is intended to run on (**NOT** the
+OnDemand node):
+
+- [Stata](https://www.stata.com/) 15+
+- [Xfce Desktop](https://xfce.org/) 4+
 
 For VNC server support:
 
-- [TurboVNC] 2.1+
-- [websockify] 0.8.0+
+- [TurboVNC](http://www.turbovnc.org/) 2.1+
+- [websockify](https://github.com/novnc/websockify) 0.8.0+
 
 ### Open OnDemand
 
-- Open OnDemmand 2.x or newer
+- Tested to work with the latest version of Open OnDemand
 - Scheduler: Slurm
 
 ### Optional
 
-- [Lmod] 6.0.1+ or any other `module purge` and `module load <modules>` based CLI used to load appropriate environments within the batch job
+- [Lmod](https://tacc.uctexas.edu/research-development/tacc-projects/lmod) 6.0.1+ or any other `module purge` and `module load <modules>` based CLI used to load appropriate environments within the batch job
 
-[Stata]: https://www.stata.com/
-[Xfce Desktop]: https://xfce.org/
-[TurboVNC]: http://www.turbovnc.org/
-[websockify]: https://github.com/novnc/websockify
-[Lmod]: https://www.tacc.utexas.edu/research-development/tacc-projects/lmod
 
 ## App Installation
 
@@ -59,46 +69,53 @@ cd bc_osc_stata
 git checkout v0.9.1
 ```
 
-You will not need to do anything beyond this as all necessary assets are
-installed. You will also not need to restart this app as it isn't a Passenger app.
-
-To update the app you would:
-
-```sh
-cd bc_osc_stata
-git fetch
-git checkout <tag/branch>
-```
-
-Again, you do not need to restart the app as it isn't a Passenger app.
+No restart is needed -- Batch Connect apps are not Passenger apps and are
+detected automatically.
 
 ### 2. Configure for your site
 
 Edit `form.yml` and update these values for your cluster:
 
-| Attribute | Default | Change to |
-|-----------|---------|-----------|
-| `cluster` | `"cardinal"` | Your cluster name |
-| `stata_version` | `"stata/18"` | The version of Stata available on your system |
-| `node_type` | OSC-specific node types | Node types available on your system |
+| Attribute         | OSC Default        | Change to                        |
+|-------------------|--------------------|----------------------------------|
+| `cluster`         | `cardinal`         | Your cluster name(s)             |
+| `stata_version`   | `stata/18`         | Stata module available on your system |
+| `node_type`       | `any`, `hugemem`   | Node types available on your cluster |
+| `num_cores.max`   | `96`               | Max cores on your compute nodes  |
+| `bc_num_hours.max`| `8`                | Max wall time for your site      |
 
-### 3. Verify
+In `script.sh.erb`, the app loads modules with:
+```
+module load stata/18
+```
+Ensure an equivalent `stata/` module is available on your system.
 
-No OOD restart is needed (Batch Connect apps are detected automatically). Visit your OOD dashboard and look for **Stata** under **Interactive Apps > GUIs**.
+In `submit.yml.erb`, the app requests a Slurm license with
+`--licenses stata@osc`. Update this to match your license server.
+
+### To Update the App
+
+```sh
+cd /var/www/ood/apps/sys/bc_osc_stata
+git fetch
+git checkout <tag>
+```
+
+No restart is needed.
 
 ## Configuration
 
 ### form.yml attributes
 
-| Attribute | Description | Default |
-|-----------|-------------|---------|
-| `cluster` | Target cluster ID | `"cardinal"` |
-| `stata_version` | Stata version to launch via stata/ module| stata/18 |
-| `bc_num_hours` | Maximum wall time (hours) | 1 |
-| `bc_num_slots` | Number of scheduler slots requested (number of nodes) | 1 | 
-| `num_cores` | Number of CPU cores (1--96, varies by node type/cluster) | 1 |
-| `node_type` | Compute node type (any, hugemem) | `"any"` |
-| `bc_vnc_resolution` | Resolution of VNC desktop session | 1228 x 691 |
+| Attribute         | Widget       | Description                                              | Default |
+|-------------------|--------------|----------------------------------------------------------|---------|
+| `cluster`         | select       | Target cluster ID(s)                                     | `cardinal` |
+| `stata_version`   | (hidden)     | Stata module to load                                     | `stata/18` |
+| `bc_num_hours`    | number       | Maximum wall time (hours)                                | 1--8 |
+| `bc_num_slots`    | (hidden)     | Number of nodes                                          | `1` |
+| `num_cores`       | number_field | Number of CPU cores (1--96)                              | `1` |
+| `node_type`       | select       | Compute node type (any, hugemem)                         | `any` |
+| `bc_vnc_resolution` | text       | VNC session resolution                                   | (required) |
 
 ### Environment Variables
 
@@ -122,7 +139,7 @@ The app may need more time to start. Increase the connection timeout or check th
 
 | Site                      | OOD Version    | Scheduler | Status     |
 |---------------------------|----------------|-----------|------------|
-| Ohio Supercomputer Center | 4.1.4 | Slurm     | Production |
+| Ohio Supercomputer Center | 4.2.2 | Slurm     | Production |
 
 To verify your installation:
 
