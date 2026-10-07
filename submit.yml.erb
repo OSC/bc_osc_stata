@@ -1,20 +1,21 @@
 <%-
-  ppn = num_cores.blank? ? 96 : num_cores.to_i
-  nodes = bc_num_slots.blank? ? 1 : bc_num_slots.to_i
-  partition = []
-
-  if node_type == 'hugemem'
-    partition_str = bc_num_slots.to_i > 1 ? "hugemem-parallel" : "hugemem"
-    partition = [ "--partition", partition_str ]
-  end
-
-  slurm_args = partition + [ "--nodes", "#{nodes}", "--ntasks-per-node", "#{ppn}", "--licenses", "stata@osc" ]
 %>
 ---
 batch_connect:
   template: vnc
 script:
   native:
-  <%- slurm_args.each do |arg| %>
-    - "<%= arg %>"
+  - "--ntasks-per-node"
+  - "<%= global_num_cores.to_i %>"
+  - "--partition"
+  <%- if global_enable_debug.to_i == 1 -%>
+  - "debug"
+  <%- else %>
+  - "batch"
   <%- end %>
+  <%- if global_enable_mem.to_i == 1 -%>
+  - "--mem"
+  - "<%= global_mem.to_i%>G"
+  <%- end %>
+  - "--licenses"
+  - "stata@osc:1"
