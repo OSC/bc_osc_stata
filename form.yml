@@ -9,9 +9,6 @@ form:
   - global_enable_mem
   - global_mem
   - bc_num_hours
-  - global_gpus
-  - global_gpu_type
-  - global_enable_vis
   - bc_vnc_resolution
   - bc_email_on_started
   - global_enable_debug
